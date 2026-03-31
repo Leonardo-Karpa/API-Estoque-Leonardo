@@ -1,3 +1,4 @@
+// importa o express
 const express = require("express");
 const router = express.Router(); 
 const fs = require("fs");
@@ -5,18 +6,18 @@ const path = require("path");
 
 const filePath = path.join(__dirname, "../data/produtos.json");
 
-
+// função para ler os produtos
 function lerDados() {
     const data = fs.readFileSync(filePath);
     return JSON.parse(data);
 }
 
-
+// funcao para salvar os produto
 function salvarDados(dados) {
     fs.writeFileSync(filePath, JSON.stringify(dados, null, 2));
 }
 
-
+// rotas
 router.get("/", (req, res) => {
     try {
         const produtos = lerDados();
@@ -25,7 +26,7 @@ router.get("/", (req, res) => {
         res.status(500).json({ erro: "Erro ao ler produtos" });
     }
 });
-
+// retorna um expecifico
 router.get("/:id", (req, res) => {
     try {
         const produtos = lerDados();
@@ -40,7 +41,7 @@ router.get("/:id", (req, res) => {
         res.status(500).json({ erro: "Erro ao buscar produto" });
     }
 });
-
+// post cria
 router.post("/", (req, res) => {
     try {
         const { nome, descricao, preco, quantidade, categoria } = req.body;
@@ -58,7 +59,7 @@ router.post("/", (req, res) => {
         }
 
         const produtos = lerDados();
-
+// cria um novo produto
         const novoProduto = {
             id: produtos.length ? produtos[produtos.length - 1].id + 1 : 1,
             nome,
@@ -77,7 +78,7 @@ router.post("/", (req, res) => {
         res.status(500).json({ erro: "Erro ao criar produto" });
     }
 });
-
+// atualiza um produto existente
 router.put("/:id", (req, res) => {
     try {
         const produtos = lerDados();
@@ -115,7 +116,7 @@ router.put("/:id", (req, res) => {
         res.status(500).json({ erro: "Erro ao atualizar produto" });
     }
 });
-
+// deleta um produto
 router.delete("/:id", (req, res) => {
     try {
         const produtos = lerDados();
